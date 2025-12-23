@@ -1,0 +1,37 @@
+@baseUrl = http://localhost:3000
+
+# Notes
+###List all notes
+
+GET {{baseUrl}}/notes/
+?limit=100
+&offset=100
+###
+
+###list one note
+GET {{baseUrl}}/notes/1/
+###
+
+###Create a note
+POST {{baseUrl}}/notes/
+Content-Type: application/json
+
+ {
+    "text": "teste1",
+    "from": "joana",
+    "for": "Lucas"  
+  }
+
+### update a note
+PATCH  {{baseUrl}}/notes/1
+Content-Type: application/json
+
+{
+    "text": "teste",
+    "from": "joana",
+    "for": "Lucas",
+    "read": true
+  }
+
+###delete a note
+DELETE {{baseUrl}}/notes/1/
