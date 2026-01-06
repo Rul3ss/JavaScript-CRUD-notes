@@ -9,7 +9,7 @@ GET {{baseUrl}}/notes/
 ###
 
 ###list one note
-GET {{baseUrl}}/notes/1/
+GET {{baseUrl}}/notes/9/
 ###
 
 ###Create a note
@@ -18,20 +18,60 @@ Content-Type: application/json
 
  {
     "text": "teste1",
-    "from": "joana",
-    "for": "Lucas"  
+    "fromId": 6,
+    "forId": 8  
   }
 
 ### update a note
-PATCH  {{baseUrl}}/notes/1
+PATCH  {{baseUrl}}/notes/3
 Content-Type: application/json
 
 {
-    "text": "teste",
-    "from": "joana",
-    "for": "Lucas",
+    "text": "teste22221",
     "read": true
   }
 
 ###delete a note
-DELETE {{baseUrl}}/notes/1/
+DELETE {{baseUrl}}/notes/2/
+
+#########################
+
+
+#########################
+
+
+
+####################User############
+
+
+###List all Users
+GET {{baseUrl}}/user/
+?limit=100
+&offset=100
+###
+
+###list one user
+GET {{baseUrl}}/user/6/
+###
+
+###Create one user
+POST {{baseUrl}}/user/
+Content-Type: application/json
+
+ {
+    "email": "Duda@email.com" ,
+    "password": "123456",
+    "name": "Dudaa"
+  }
+
+### update a user
+PATCH  {{baseUrl}}/user/6
+Content-Type: application/json
+
+{
+   "password": "123456",
+   "name": "Lucas"
+  }
+
+###delete a user
+DELETE {{baseUrl}}/user/2/

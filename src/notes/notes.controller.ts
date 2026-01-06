@@ -18,29 +18,32 @@ export class notesController {
   constructor(private readonly notesService: NotesService) {}
 
   @Get()
-  findAll(@Query() pagination: any) {
+  async findAll(@Query() pagination: any) {
     const { limit = 10, offset = 0 } = pagination;
     //return `This route return all notes. Limit = ${limit}, offset = ${offset}`;
-    return this.notesService.findall();
+    return await this.notesService.findall();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.notesService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.notesService.findOne(id);
   }
 
   @Post()
-  create(@Body() createNoteDto: CreateNoteDto) {
-    return this.notesService.create(createNoteDto);
+  async create(@Body() createNoteDto: CreateNoteDto) {
+    return await this.notesService.create(createNoteDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateNoteDto: UpdateNoteDto,
+  ) {
     return this.notesService.update(id, updateNoteDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.notesService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.notesService.remove(id);
   }
 }

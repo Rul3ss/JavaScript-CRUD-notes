@@ -1,15 +1,13 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsPositive, IsString } from 'class-validator';
 
 export class CreateNoteDto {
   @IsString()
   @IsNotEmpty()
   readonly text: string;
 
-  @IsString()
-  @IsNotEmpty()
-  readonly from: string;
+  @IsPositive()
+  fromId: number;
 
-  @IsString()
-  @IsNotEmpty()
-  readonly for: string;
+  @IsPositive()
+  forId: number;
 }
