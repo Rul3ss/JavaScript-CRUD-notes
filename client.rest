@@ -4,12 +4,13 @@
 ###List all notes
 
 GET {{baseUrl}}/notes/
-?limit=100
-&offset=100
+?limit=10
+&offset=0
+Authorization: Bearer 123456
 ###
 
 ###list one note
-GET {{baseUrl}}/notes/9/
+GET {{baseUrl}}/notes/a/
 ###
 
 ###Create a note
@@ -17,18 +18,18 @@ POST {{baseUrl}}/notes/
 Content-Type: application/json
 
  {
-    "text": "teste1",
-    "fromId": 6,
-    "forId": 8  
+    "text": "Oi Lucas",
+    "fromId": 9,
+    "forId": 6  
   }
 
 ### update a note
-PATCH  {{baseUrl}}/notes/3
+PATCH  {{baseUrl}}/notes/11
 Content-Type: application/json
 
 {
-    "text": "teste22221",
-    "read": true
+    "text": "oi duda update",
+    "read": false
   }
 
 ###delete a note
@@ -69,9 +70,9 @@ PATCH  {{baseUrl}}/user/6
 Content-Type: application/json
 
 {
-   "password": "123456",
-   "name": "Lucas"
+  "password": "123456",
+  "name": "Lucas"
   }
 
 ###delete a user
-DELETE {{baseUrl}}/user/2/
+DELETE {{baseUrl}}/user/8/

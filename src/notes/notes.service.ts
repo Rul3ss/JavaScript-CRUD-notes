@@ -5,7 +5,7 @@ import { UpdateNoteDto } from './dto/update-note.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
-import { idText } from 'typescript';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class NotesService {
@@ -15,8 +15,12 @@ export class NotesService {
     private readonly userService: UserService,
   ) {}
 
-  async findall() {
+  async findall(paginationDto?: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+
     return await this.noteRepository.find({
+      take: limit,
+      skip: offset,
       relations: ['from', 'for'],
       select: {
         from: {
@@ -24,12 +28,11 @@ export class NotesService {
           name: true,
         },
         for: {
-          id:true,
+          id: true,
           name: true,
-        }
-      }
-    }
-    );
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
@@ -46,11 +49,10 @@ export class NotesService {
           name: true,
         },
         for: {
-          id:true,
+          id: true,
           name: true,
-        }
-      }
-      
+        },
+      },
     });
     if (note) return note;
 
@@ -58,17 +60,11 @@ export class NotesService {
   }
 
   async create(createNoteDto: CreateNoteDto) {
-    const{fromId, forId} = createNoteDto;
+    const { fromId, forId } = createNoteDto;
 
-    const from = await this.userService.findOne(fromId)
+    const from = await this.userService.findOne(fromId);
 
-    const for1 = await this.userService.findOne(forId)
-
-
-
-
-
-
+    const for1 = await this.userService.findOne(forId);
 
     const newNote = {
       text: createNoteDto.text,
@@ -84,27 +80,21 @@ export class NotesService {
     return {
       ...note,
       from: {
-        id: note.from.id
+        id: note.from.id,
       },
       for: {
-        id: note.for.id
+        id: note.for.id,
       },
     };
   }
 
   async update(id: number, updateNoteDto: UpdateNoteDto) {
-    const partialUpdateRecadoDto = {
-      read: updateNoteDto?.read,
-      text: updateNoteDto?.text,
-    };
-    const note = await this.noteRepository.preload({
-      id,
-      ...partialUpdateRecadoDto,
-    });
+    const note = await this.findOne(id);
 
-    if (!note) return new NotFoundException(`Note not found`);
+    note.text = updateNoteDto?.text ?? note.text;
+    note.read = updateNoteDto?.read ?? note.read;
 
-    return this.noteRepository.save(note);
+    return await this.noteRepository.save(note);
   }
 
   async remove(id: number) {

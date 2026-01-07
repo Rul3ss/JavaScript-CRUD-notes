@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,24 +13,22 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository <User>,
-  ) {
-    
-  }
+    private readonly userRepository: Repository<User>,
+  ) {}
   async create(createUserDto: CreateUserDto) {
-    try{
+    try {
       const userData = {
-      name: createUserDto.name,
-      passwordHash: createUserDto.password,
-      email: createUserDto.email
-    };
+        name: createUserDto.name,
+        passwordHash: createUserDto.password,
+        email: createUserDto.email,
+      };
 
-    const newUser = this.userRepository.create(userData);
-    await this.userRepository.save(newUser);
-    return newUser;
-    } catch(error){
-      if(error.code === '23505'){
-        throw new ConflictException('E-mail já está cadastrado')
+      const newUser = this.userRepository.create(userData);
+      await this.userRepository.save(newUser);
+      return newUser;
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException('E-mail já está cadastrado');
       }
       throw error;
     }
@@ -45,18 +47,16 @@ export class UserService {
   async findOne(id: number) {
     const user = await this.userRepository.findOneBy({
       id,
-    })
-    if(!user){
+    });
+    if (!user) {
       throw new NotFoundException('User not found');
     }
     return user;
-
   }
   async update(id: number, updateUserDto: UpdateUserDto) {
-
     const userData = {
       name: updateUserDto.name,
-      passwordHash: updateUserDto.password,    
+      passwordHash: updateUserDto.password,
     };
 
     const user = await this.userRepository.preload({
@@ -64,7 +64,7 @@ export class UserService {
       ...userData,
     });
 
-    if(!user){
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
@@ -75,7 +75,7 @@ export class UserService {
     const user = await this.userRepository.findOneBy({
       id,
     });
-    if (!user){
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 

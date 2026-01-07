@@ -7,25 +7,32 @@ import {
   Post,
   Delete,
   Query,
-  ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AddHeaderInterceptor } from 'src/common/interceptors/add-header.interceptor';
+import { ErrorHandlingInterceptor } from 'src/common/interceptors/error-handling.interceptor';
+import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interceptor';
 
 @Controller('notes')
+//@UseInterceptors(ChangeDataInterceptor)
+@UseInterceptors(AuthTokenInterceptor)
 export class notesController {
   constructor(private readonly notesService: NotesService) {}
 
   @Get()
-  async findAll(@Query() pagination: any) {
-    const { limit = 10, offset = 0 } = pagination;
+  //@UseInterceptors(AddHeaderInterceptor, ErrorHandlingInterceptor, SimpleCacheInterceptor)
+  async findAll(@Query() paginationDto: PaginationDto) {
     //return `This route return all notes. Limit = ${limit}, offset = ${offset}`;
-    return await this.notesService.findall();
+    return await this.notesService.findall(paginationDto);
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  @UseInterceptors(AddHeaderInterceptor, ErrorHandlingInterceptor)
+  async findOne(@Param('id') id: number) {
     return await this.notesService.findOne(id);
   }
 
@@ -35,15 +42,12 @@ export class notesController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateNoteDto: UpdateNoteDto,
-  ) {
+  update(@Param('id') id: number, @Body() updateNoteDto: UpdateNoteDto) {
     return this.notesService.update(id, updateNoteDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param('id') id: number) {
     return await this.notesService.remove(id);
   }
 }

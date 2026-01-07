@@ -29,12 +29,11 @@ export class Note {
   @UpdateDateColumn()
   updatedAt?: Date;
 
-  @ManyToOne(() => User)
-  @JoinColumn({name: 'from'})
+  @ManyToOne(() => User, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @JoinColumn({ name: 'from' })
   from: User;
 
-  @ManyToOne(() => User)
-  @JoinColumn({name: 'for'})
+  @ManyToOne(() => User, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  @JoinColumn({ name: 'for' })
   for: User;
-
 }
