@@ -1,8 +1,4 @@
-import {
-  CallHandler,
-  ExecutionContext,
-  NestInterceptor,
-} from '@nestjs/common';
+import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { of, tap } from 'rxjs';
 
 export class SimpleCacheInterceptor implements NestInterceptor {

@@ -1,8 +1,4 @@
-import {
-  CallHandler,
-  ExecutionContext,
-  NestInterceptor,
-} from '@nestjs/common';
+import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { map, of, tap } from 'rxjs';
 
 export class ChangeDataInterceptor implements NestInterceptor {

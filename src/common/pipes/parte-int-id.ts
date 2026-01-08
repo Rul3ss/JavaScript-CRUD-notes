@@ -4,7 +4,6 @@ import {
   Injectable,
   PipeTransform,
 } from '@nestjs/common';
-import { MetadataTableType } from 'typeorm/driver/types/MetadataTableType.js';
 
 @Injectable()
 export class ParseIntIdPipe implements PipeTransform {

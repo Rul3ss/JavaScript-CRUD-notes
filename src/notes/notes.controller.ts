@@ -16,6 +16,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AddHeaderInterceptor } from 'src/common/interceptors/add-header.interceptor';
 import { ErrorHandlingInterceptor } from 'src/common/interceptors/error-handling.interceptor';
 import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interceptor';
+import { ReqDataParam } from 'src/common/params/req-data-param.decorator';
 
 @Controller('notes')
 //@UseInterceptors(ChangeDataInterceptor)
@@ -25,7 +26,9 @@ export class notesController {
 
   @Get()
   //@UseInterceptors(AddHeaderInterceptor, ErrorHandlingInterceptor, SimpleCacheInterceptor)
-  async findAll(@Query() paginationDto: PaginationDto) {
+  async findAll(@Query() paginationDto: PaginationDto, @ReqDataParam('method') method) {
+    console.log(method);
+    //console.log('NoteController', req['user']);
     //return `This route return all notes. Limit = ${limit}, offset = ${offset}`;
     return await this.notesService.findall(paginationDto);
   }

@@ -10,7 +10,7 @@ Authorization: Bearer 123456
 ###
 
 ###list one note
-GET {{baseUrl}}/notes/a/
+GET {{baseUrl}}/notes/1/
 ###
 
 ###Create a note
@@ -52,7 +52,7 @@ GET {{baseUrl}}/user/
 ###
 
 ###list one user
-GET {{baseUrl}}/user/6/
+GET {{baseUrl}}/user/a/
 ###
 
 ###Create one user
