@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   UseInterceptors,
+  Inject,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -16,18 +17,21 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AddHeaderInterceptor } from 'src/common/interceptors/add-header.interceptor';
 import { ErrorHandlingInterceptor } from 'src/common/interceptors/error-handling.interceptor';
 import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interceptor';
-import { ReqDataParam } from 'src/common/params/req-data-param.decorator';
 
 @Controller('notes')
 //@UseInterceptors(ChangeDataInterceptor)
 @UseInterceptors(AuthTokenInterceptor)
 export class notesController {
-  constructor(private readonly notesService: NotesService) {}
+  constructor(
+    private readonly notesService: NotesService,
+
+  ) {}
 
   @Get()
   //@UseInterceptors(AddHeaderInterceptor, ErrorHandlingInterceptor, SimpleCacheInterceptor)
-  async findAll(@Query() paginationDto: PaginationDto, @ReqDataParam('method') method) {
-    console.log(method);
+  async findAll(@Query() paginationDto: PaginationDto) {
+
+
     //console.log('NoteController', req['user']);
     //return `This route return all notes. Limit = ${limit}, offset = ${offset}`;
     return await this.notesService.findall(paginationDto);
