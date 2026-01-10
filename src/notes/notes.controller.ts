@@ -22,16 +22,11 @@ import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interce
 //@UseInterceptors(ChangeDataInterceptor)
 @UseInterceptors(AuthTokenInterceptor)
 export class notesController {
-  constructor(
-    private readonly notesService: NotesService,
-
-  ) {}
+  constructor(private readonly notesService: NotesService) {}
 
   @Get()
   //@UseInterceptors(AddHeaderInterceptor, ErrorHandlingInterceptor, SimpleCacheInterceptor)
   async findAll(@Query() paginationDto: PaginationDto) {
-
-
     //console.log('NoteController', req['user']);
     //return `This route return all notes. Limit = ${limit}, offset = ${offset}`;
     return await this.notesService.findall(paginationDto);
