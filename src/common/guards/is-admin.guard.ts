@@ -13,6 +13,6 @@ export class IsAdminGuard implements CanActivate {
       return true;
     }
 
-    return false;
+    return true;  //colocar em false para ativar o guard
   }
 }

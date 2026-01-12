@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Note } from './entities/note.entity';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import type { ConfigService, ConfigType } from '@nestjs/config';
+import noteConfig from './note.config';
 
 @Injectable()
 export class NotesService {
@@ -13,7 +15,12 @@ export class NotesService {
     @InjectRepository(Note)
     private readonly noteRepository: Repository<Note>,
     private readonly userService: UserService,
-  ) {}
+    @Inject(noteConfig.KEY)
+    private readonly noteConfiguration: ConfigType<typeof noteConfig>
+  ) {
+    console.log(noteConfiguration)
+
+  }
 
   async findall(paginationDto?: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;

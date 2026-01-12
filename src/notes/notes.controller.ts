@@ -20,7 +20,7 @@ import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interce
 
 @Controller('notes')
 //@UseInterceptors(ChangeDataInterceptor)
-@UseInterceptors(AuthTokenInterceptor)
+//@UseInterceptors(AuthTokenInterceptor)
 export class notesController {
   constructor(private readonly notesService: NotesService) {}
 

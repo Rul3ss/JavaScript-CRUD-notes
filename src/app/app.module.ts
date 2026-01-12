@@ -1,32 +1,37 @@
 import {
-  MiddlewareConsumer,
   Module,
-  NestModule,
-  RequestMethod,
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { notesModule } from 'src/notes/notes.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
-import { SimpleMiddleware } from 'src/common/middlewares/simple.middleware';
-import { AnotherMiddleware } from 'src/common/middlewares/another.middleware';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { MyExceptionFilter } from 'src/common/filters/my-exception.filter';
 import { ErrorExceptionFilter } from 'src/common/filters/error-exception.filter';
 import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
+import { ConfigModule, ConfigType } from '@nestjs/config';
+import appConfig from './app.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      database: 'postgres',
-      password: '123456',
-      autoLoadEntities: true,
-      synchronize: true, // não deve ser usado em produção
+    ConfigModule.forRoot(),
+    ConfigModule.forFeature(appConfig),
+    TypeOrmModule.forRootAsync({
+    imports: [ConfigModule.forFeature(appConfig)],
+    inject: [appConfig.KEY],
+    useFactory: async (appConfigurations: ConfigType<typeof appConfig>) =>{
+      return {
+        type: appConfigurations.database.type,
+        host: appConfigurations.database.host,
+        port: appConfigurations.database.port,
+        username: appConfigurations.database.username,
+        database: appConfigurations.database.database,
+        password: appConfigurations.database.password,
+        autoLoadEntities: appConfigurations.database.autoLoadEntities,
+        synchronize: appConfigurations.database.synchronize, // não deve ser usado em produção
+      }
+    }
     }),
     notesModule,
     UserModule,
@@ -48,11 +53,5 @@ import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
     },
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(SimpleMiddleware, AnotherMiddleware).forRoutes({
-      path: '*',
-      method: RequestMethod.ALL,
-    });
-  }
+export class AppModule {
 }

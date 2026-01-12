@@ -7,10 +7,11 @@ GET {{baseUrl}}/notes/
 ?limit=10
 &offset=0
 Authorization: Bearer 123456
+role: admin
 ###
 
 ###list one note
-GET {{baseUrl}}/notes/1/
+GET {{baseUrl}}/notes/12/
 ###
 
 ###Create a note
