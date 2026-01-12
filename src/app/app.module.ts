@@ -12,6 +12,7 @@ import { ErrorExceptionFilter } from 'src/common/filters/error-exception.filter'
 import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import appConfig from './app.config';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import appConfig from './app.config';
     }),
     notesModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
