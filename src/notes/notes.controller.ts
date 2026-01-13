@@ -9,6 +9,7 @@ import {
   Query,
   UseInterceptors,
   Inject,
+  UseGuards,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -17,6 +18,9 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AddHeaderInterceptor } from 'src/common/interceptors/add-header.interceptor';
 import { ErrorHandlingInterceptor } from 'src/common/interceptors/error-handling.interceptor';
 import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interceptor';
+import { AuthTokenGuard } from 'src/auth/guard/auth-token.guard';
+import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
+import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 
 @Controller('notes')
 //@UseInterceptors(ChangeDataInterceptor)
@@ -38,18 +42,21 @@ export class notesController {
     return await this.notesService.findOne(id);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Post()
-  async create(@Body() createNoteDto: CreateNoteDto) {
-    return await this.notesService.create(createNoteDto);
+  async create(@Body() createNoteDto: CreateNoteDto, @TokenPayloadParam() tokenpayload: TokenPayloadDto) {
+    return await this.notesService.create(createNoteDto, tokenpayload);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.notesService.update(id, updateNoteDto);
+  update(@Param('id') id: number, @Body() updateNoteDto: UpdateNoteDto, @TokenPayloadParam() tokenpayload: TokenPayloadDto) {
+    return this.notesService.update(id, updateNoteDto, tokenpayload);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Delete(':id')
-  async remove(@Param('id') id: number) {
-    return await this.notesService.remove(id);
+  async remove(@Param('id') id: number, @TokenPayloadParam() tokenpayload: TokenPayloadDto) {
+    return await this.notesService.remove(id, tokenpayload);
   }
 }

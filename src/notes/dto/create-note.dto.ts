@@ -6,8 +6,5 @@ export class CreateNoteDto {
   readonly text: string;
 
   @IsPositive()
-  fromId: number;
-
-  @IsPositive()
   forId: number;
 }

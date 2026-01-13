@@ -1,5 +1,6 @@
 @baseUrl = http://localhost:3000
 
+@authToken = {{authenticate.response.body.acessToken}}
 # Notes
 ###List all notes
 
@@ -12,21 +13,23 @@ role: admin
 
 ###list one note
 GET {{baseUrl}}/notes/12/
+Authorization: Bearer {{authToken}}
 ###
 
 ###Create a note
 POST {{baseUrl}}/notes/
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
  {
-    "text": "Oi Lucas",
-    "fromId": 9,
-    "forId": 6  
+    "text": "Novo recado",
+    "forId": 12  
   }
 
 ### update a note
-PATCH  {{baseUrl}}/notes/11
+PATCH  {{baseUrl}}/notes/16
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
     "text": "oi duda update",
@@ -34,7 +37,8 @@ Content-Type: application/json
   }
 
 ###delete a note
-DELETE {{baseUrl}}/notes/2/
+DELETE {{baseUrl}}/notes/16/
+Authorization: Bearer {{authToken}}
 
 #########################
 
@@ -50,42 +54,47 @@ DELETE {{baseUrl}}/notes/2/
 GET {{baseUrl}}/user/
 ?limit=100
 &offset=100
-###
+Authorization: Bearer {{authToken}}
 
 ###list one user
-GET {{baseUrl}}/user/a/
+GET {{baseUrl}}/user/12/
+Authorization: Bearer {{authToken}}
 ###
 
 ###Create one user
 POST {{baseUrl}}/user/
 Content-Type: application/json
 
+
  {
-    "email": "Maria@email.com" ,
+    "email": "Duda1@email.com" ,
     "password": "123456",
-    "name": "Dudaa"
+    "name": "Duda Teste"
   }
 
 ### update a user
-PATCH  {{baseUrl}}/user/11
+PATCH  {{baseUrl}}/user/15
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
-  "password": "aaaaaa",
-  "name": "Lucas"
+  "password": "111111",
+  "name": "Duda Atualizada"
   }
 
 ###delete a user
-DELETE {{baseUrl}}/user/8/
+DELETE {{baseUrl}}/user/12/
+Authorization: Bearer {{authToken}}
 
 
 
 ######AUTH#####
 
+# @name authenticate
 POST {{baseUrl}}/auth/
 Content-Type: application/json
 
 {
-  "email": "teste@email.com",
-  "password": "12345"
+  "email": "Duda1@email.com",
+  "password": "123456"
 }

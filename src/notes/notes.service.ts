@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadGatewayException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Note } from './entities/note.entity';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
@@ -8,6 +8,7 @@ import { UserService } from 'src/user/user.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { ConfigService, ConfigType } from '@nestjs/config';
 import noteConfig from './note.config';
+import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 
 @Injectable()
 export class NotesService {
@@ -66,10 +67,10 @@ export class NotesService {
     throw new NotFoundException(`Note not found`);
   }
 
-  async create(createNoteDto: CreateNoteDto) {
-    const { fromId, forId } = createNoteDto;
+  async create(createNoteDto: CreateNoteDto, tokenPayload: TokenPayloadDto) {
+    const { forId } = createNoteDto;
 
-    const from = await this.userService.findOne(fromId);
+    const from = await this.userService.findOne(tokenPayload.sub);
 
     const for1 = await this.userService.findOne(forId);
 
@@ -88,15 +89,24 @@ export class NotesService {
       ...note,
       from: {
         id: note.from.id,
+        name: note.from.name,
       },
       for: {
         id: note.for.id,
+        name: note.for.id,
       },
     };
   }
 
-  async update(id: number, updateNoteDto: UpdateNoteDto) {
+  async update(id: number, updateNoteDto: UpdateNoteDto, tokenPayload: TokenPayloadDto) {
     const note = await this.findOne(id);
+
+    
+    if(note.from.id !== tokenPayload.sub){
+      throw new BadGatewayException ('U cant delete another user note')
+    }
+
+    
 
     note.text = updateNoteDto?.text ?? note.text;
     note.read = updateNoteDto?.read ?? note.read;
@@ -104,12 +114,12 @@ export class NotesService {
     return await this.noteRepository.save(note);
   }
 
-  async remove(id: number) {
-    const note = await this.noteRepository.findOneBy({
-      id,
-    });
+  async remove(id: number, tokenPayload: TokenPayloadDto) {
+    const note = await this.findOne(id)
 
-    if (!note) return new NotFoundException(`Note not found`);
+    if(note.from.id !== tokenPayload.sub){
+      throw new ForbiddenException ('U cant delete another user note')
+    }
 
     return this.noteRepository.remove(note);
   }
