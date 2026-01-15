@@ -8,7 +8,11 @@ import { ConfigModule } from '@nestjs/config';
 import noteConfig from './note.config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Note]), UserModule, ConfigModule.forFeature(noteConfig)],
+  imports: [
+    TypeOrmModule.forFeature([Note]),
+    UserModule,
+    ConfigModule.forFeature(noteConfig),
+  ],
   controllers: [notesController],
   providers: [NotesService],
 })

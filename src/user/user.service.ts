@@ -23,8 +23,7 @@ export class UserService {
     try {
       const passwordHash = await this.hashingService.hash(
         createUserDto.password,
-      )
-
+      );
 
       const userData = {
         name: createUserDto.name,
@@ -62,21 +61,22 @@ export class UserService {
     }
     return user;
   }
-  async update(id: number, updateUserDto: UpdateUserDto, tokenPayload: TokenPayloadDto) {
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+    tokenPayload: TokenPayloadDto,
+  ) {
     const userData = {
       name: updateUserDto.name,
-    
     };
 
-    if(updateUserDto?.password){
+    if (updateUserDto?.password) {
       const passwordHash = await this.hashingService.hash(
         updateUserDto.password,
       );
 
-      userData['passwordHash'] = passwordHash ;
+      userData['passwordHash'] = passwordHash;
     }
-
-    
 
     const user = await this.userRepository.preload({
       id,
@@ -87,8 +87,8 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    if(user.id !== tokenPayload.sub){
-      throw new ForbiddenException('U cant acess another user')
+    if (user.id !== tokenPayload.sub) {
+      throw new ForbiddenException('U cant acess another user');
     }
 
     return this.userRepository.save(user);
@@ -102,8 +102,8 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    if(user.id !== tokenPayload.sub){
-      throw new ForbiddenException('U cant acess another user')
+    if (user.id !== tokenPayload.sub) {
+      throw new ForbiddenException('U cant acess another user');
     }
 
     return this.userRepository.remove(user);

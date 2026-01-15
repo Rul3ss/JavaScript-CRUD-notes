@@ -5,7 +5,8 @@ import type { ConfigType } from '@nestjs/config';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService,
+  constructor(
+    private readonly appService: AppService,
     @Inject(appConfig.KEY)
     private readonly appConfiguration: ConfigType<typeof appConfig>,
   ) {}

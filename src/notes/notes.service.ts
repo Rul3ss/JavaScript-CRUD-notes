@@ -1,4 +1,10 @@
-import { BadGatewayException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Note } from './entities/note.entity';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
@@ -17,10 +23,9 @@ export class NotesService {
     private readonly noteRepository: Repository<Note>,
     private readonly userService: UserService,
     @Inject(noteConfig.KEY)
-    private readonly noteConfiguration: ConfigType<typeof noteConfig>
+    private readonly noteConfiguration: ConfigType<typeof noteConfig>,
   ) {
-    console.log(noteConfiguration)
-
+    console.log(noteConfiguration);
   }
 
   async findall(paginationDto?: PaginationDto) {
@@ -98,15 +103,16 @@ export class NotesService {
     };
   }
 
-  async update(id: number, updateNoteDto: UpdateNoteDto, tokenPayload: TokenPayloadDto) {
+  async update(
+    id: number,
+    updateNoteDto: UpdateNoteDto,
+    tokenPayload: TokenPayloadDto,
+  ) {
     const note = await this.findOne(id);
 
-    
-    if(note.from.id !== tokenPayload.sub){
-      throw new BadGatewayException ('U cant delete another user note')
+    if (note.from.id !== tokenPayload.sub) {
+      throw new BadGatewayException('U cant delete another user note');
     }
-
-    
 
     note.text = updateNoteDto?.text ?? note.text;
     note.read = updateNoteDto?.read ?? note.read;
@@ -115,10 +121,10 @@ export class NotesService {
   }
 
   async remove(id: number, tokenPayload: TokenPayloadDto) {
-    const note = await this.findOne(id)
+    const note = await this.findOne(id);
 
-    if(note.from.id !== tokenPayload.sub){
-      throw new ForbiddenException ('U cant delete another user note')
+    if (note.from.id !== tokenPayload.sub) {
+      throw new ForbiddenException('U cant delete another user note');
     }
 
     return this.noteRepository.remove(note);

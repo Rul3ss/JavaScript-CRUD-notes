@@ -44,19 +44,29 @@ export class notesController {
 
   @UseGuards(AuthTokenGuard)
   @Post()
-  async create(@Body() createNoteDto: CreateNoteDto, @TokenPayloadParam() tokenpayload: TokenPayloadDto) {
+  async create(
+    @Body() createNoteDto: CreateNoteDto,
+    @TokenPayloadParam() tokenpayload: TokenPayloadDto,
+  ) {
     return await this.notesService.create(createNoteDto, tokenpayload);
   }
 
   @UseGuards(AuthTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateNoteDto: UpdateNoteDto, @TokenPayloadParam() tokenpayload: TokenPayloadDto) {
+  update(
+    @Param('id') id: number,
+    @Body() updateNoteDto: UpdateNoteDto,
+    @TokenPayloadParam() tokenpayload: TokenPayloadDto,
+  ) {
     return this.notesService.update(id, updateNoteDto, tokenpayload);
   }
 
   @UseGuards(AuthTokenGuard)
   @Delete(':id')
-  async remove(@Param('id') id: number, @TokenPayloadParam() tokenpayload: TokenPayloadDto) {
+  async remove(
+    @Param('id') id: number,
+    @TokenPayloadParam() tokenpayload: TokenPayloadDto,
+  ) {
     return await this.notesService.remove(id, tokenpayload);
   }
 }

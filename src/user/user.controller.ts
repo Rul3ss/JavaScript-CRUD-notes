@@ -17,8 +17,6 @@ import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 import { AuthTokenGuard } from 'src/auth/guard/auth-token.guard';
 
-
-
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -39,12 +37,19 @@ export class UserController {
   }
   @UseGuards(AuthTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @TokenPayloadParam() tokenPayload: TokenPayloadDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto,
+  ) {
     return this.userService.update(+id, updateUserDto, tokenPayload);
   }
   @UseGuards(AuthTokenGuard)
   @Delete(':id')
-  remove(@Param('id') id: string, @TokenPayloadParam() tokenPayload: TokenPayloadDto ) {
+  remove(
+    @Param('id') id: string,
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto,
+  ) {
     return this.userService.remove(+id, tokenPayload);
   }
 }

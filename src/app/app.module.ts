@@ -1,6 +1,4 @@
-import {
-  Module,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { notesModule } from 'src/notes/notes.module';
@@ -19,20 +17,20 @@ import { AuthModule } from 'src/auth/auth.module';
     ConfigModule.forRoot(),
     ConfigModule.forFeature(appConfig),
     TypeOrmModule.forRootAsync({
-    imports: [ConfigModule.forFeature(appConfig)],
-    inject: [appConfig.KEY],
-    useFactory: async (appConfigurations: ConfigType<typeof appConfig>) =>{
-      return {
-        type: appConfigurations.database.type,
-        host: appConfigurations.database.host,
-        port: appConfigurations.database.port,
-        username: appConfigurations.database.username,
-        database: appConfigurations.database.database,
-        password: appConfigurations.database.password,
-        autoLoadEntities: appConfigurations.database.autoLoadEntities,
-        synchronize: appConfigurations.database.synchronize, // não deve ser usado em produção
-      }
-    }
+      imports: [ConfigModule.forFeature(appConfig)],
+      inject: [appConfig.KEY],
+      useFactory: async (appConfigurations: ConfigType<typeof appConfig>) => {
+        return {
+          type: appConfigurations.database.type,
+          host: appConfigurations.database.host,
+          port: appConfigurations.database.port,
+          username: appConfigurations.database.username,
+          database: appConfigurations.database.database,
+          password: appConfigurations.database.password,
+          autoLoadEntities: appConfigurations.database.autoLoadEntities,
+          synchronize: appConfigurations.database.synchronize, // não deve ser usado em produção
+        };
+      },
     }),
     notesModule,
     UserModule,
@@ -55,5 +53,4 @@ import { AuthModule } from 'src/auth/auth.module';
     },
   ],
 })
-export class AppModule {
-}
+export class AppModule {}
