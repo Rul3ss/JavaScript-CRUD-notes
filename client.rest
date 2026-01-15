@@ -71,8 +71,7 @@ Content-Type: application/json
  {
     "email": "Lucas6@email.com" ,
     "password": "123456",
-    "name": "Lucas Souza",
-    "routePolicies": ["createOneUser", "updateOneNote"]
+    "name": "Lucas Souza"
   }
 
 ### update a user

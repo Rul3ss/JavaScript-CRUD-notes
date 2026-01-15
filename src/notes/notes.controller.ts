@@ -30,7 +30,7 @@ export class notesController {
   constructor(private readonly notesService: NotesService) {}
 
   
-  @UseGuards(AuthTokenGuard)
+  //@UseGuards(AuthTokenGuard)
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
     return this.notesService.findall(paginationDto);
