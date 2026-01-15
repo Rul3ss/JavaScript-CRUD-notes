@@ -29,6 +29,7 @@ export class UserService {
         name: createUserDto.name,
         passwordHash,
         email: createUserDto.email,
+        
       };
 
       const newUser = this.userRepository.create(userData);

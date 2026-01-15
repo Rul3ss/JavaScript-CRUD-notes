@@ -14,7 +14,7 @@ role: admin
 ###
 
 ###list one note
-GET {{baseUrl}}/notes/12/
+GET {{baseUrl}}/notes/4/
 Authorization: Bearer {{authToken}}
 ###
 
@@ -25,21 +25,21 @@ Authorization: Bearer {{authToken}}
 
  {
     "text": "Novo recado",
-    "forId": 12  
+    "forId": 1  
   }
 
 ### update a note
-PATCH  {{baseUrl}}/notes/16
+PATCH  {{baseUrl}}/notes/4
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
     "text": "oi duda update",
-    "read": false
+    "read": true
   }
 
 ###delete a note
-DELETE {{baseUrl}}/notes/16/
+DELETE {{baseUrl}}/notes/4/
 Authorization: Bearer {{authToken}}
 
 #########################
@@ -69,9 +69,10 @@ Content-Type: application/json
 
 
  {
-    "email": "Lucas1@email.com" ,
+    "email": "Lucas6@email.com" ,
     "password": "123456",
-    "name": "Lucas Castro"
+    "name": "Lucas Souza",
+    "routePolicies": ["createOneUser", "updateOneNote"]
   }
 
 ### update a user
@@ -97,7 +98,7 @@ POST {{baseUrl}}/auth
 Content-Type: application/json
 
 {
-  "email": "Lucas1@email.com",
+  "email": "Lucas6@email.com",
   "password": "123456"
 }
 

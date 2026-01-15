@@ -25,7 +25,12 @@ export class AuthService {
     let throwError = true;
     const user = await this.userRepository.findOneBy({
       email: loginDto.email,
+      active: true,
     });
+
+    if(!user){
+        throw new UnauthorizedException ('User not authorized')
+    }
 
     if (user) {
       passWordIsValid = await this.hashService.compare(
@@ -87,11 +92,12 @@ export class AuthService {
             refreshTokenDto.refreshToken, this.jwtConfiguration
         )
         const user = await this.userRepository.findOneBy({
-            id:sub
+            id:sub,
+            active: true,
         })
 
         if(!user) {
-            throw new Error('User not found')
+            throw new Error('User not Authorized')
         }
         return this.CreateTokens(user);
     } catch(error){

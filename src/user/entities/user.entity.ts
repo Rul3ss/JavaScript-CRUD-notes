@@ -1,4 +1,5 @@
 import { IsEmail } from 'class-validator';
+import { RoutePolices } from 'src/auth/enum/route-polices.enum';
 import { Note } from 'src/notes/entities/note.entity';
 import {
   Column,
@@ -34,4 +35,8 @@ export class User {
   notesend: Note[];
   @OneToMany(() => Note, note => note.for)
   notereceived: Note[];
+
+  @Column({default: true})
+  active: boolean;
+
 }
