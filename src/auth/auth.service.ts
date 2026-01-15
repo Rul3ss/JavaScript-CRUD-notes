@@ -30,6 +30,8 @@ export class AuthService{
             email: loginDto.email,
         })
 
+        
+
         if(user){
             passWordIsValid = await this.hashService.compare(
                 loginDto.password,
@@ -39,6 +41,8 @@ export class AuthService{
 
         }
 
+        
+
         if(passWordIsValid){
             throwError = false;
         }
@@ -47,20 +51,21 @@ export class AuthService{
             throw new UnauthorizedException('User invalid')
         }
 
-        const acessToken = await this.jwtService.signAsync({
+        const acessToken = await this.jwtService.signAsync(
+            {
             sub: user.id,
             email: user.email,
-        },{
+
+        },
+        {
             audience: this.jwtConfiguration.audience,
-            issuer: this.jwtConfiguration.issue,
+            issuer: this.jwtConfiguration.issuer,
             secret: this.jwtConfiguration.secret,
-            expiresIn: this.jwtConfiguration.ttl,
-        })
-
-
-
+            expiresIn: this.jwtConfiguration.jwtTtl,
+        });
 
         return {
+            
             acessToken,
         };
     }

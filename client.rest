@@ -57,7 +57,7 @@ GET {{baseUrl}}/user/
 Authorization: Bearer {{authToken}}
 
 ###list one user
-GET {{baseUrl}}/user/12/
+GET {{baseUrl}}/user/1/
 Authorization: Bearer {{authToken}}
 ###
 
@@ -67,19 +67,19 @@ Content-Type: application/json
 
 
  {
-    "email": "Duda1@email.com" ,
+    "email": "Lucas1@email.com" ,
     "password": "123456",
-    "name": "Duda Teste"
+    "name": "Lucas Castro"
   }
 
 ### update a user
-PATCH  {{baseUrl}}/user/15
+PATCH  {{baseUrl}}/user/5
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "password": "111111",
-  "name": "Duda Atualizada"
+  "password": "123456",
+  "name": "Lucas Atualizado"
   }
 
 ###delete a user
@@ -91,10 +91,10 @@ Authorization: Bearer {{authToken}}
 ######AUTH#####
 
 # @name authenticate
-POST {{baseUrl}}/auth/
+POST {{baseUrl}}/auth
 Content-Type: application/json
 
 {
-  "email": "Duda1@email.com",
+  "email": "Lucas1@email.com",
   "password": "123456"
 }
