@@ -9,7 +9,6 @@ import {
   Query,
   UseInterceptors,
   UseGuards,
-
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -29,7 +28,6 @@ import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 export class notesController {
   constructor(private readonly notesService: NotesService) {}
 
-  
   //@UseGuards(AuthTokenGuard)
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
@@ -42,8 +40,6 @@ export class notesController {
     return await this.notesService.findOne(id);
   }
 
-
-
   @UseGuards(AuthTokenGuard)
   @Post()
   create(
@@ -53,8 +49,7 @@ export class notesController {
     return this.notesService.create(createNoteDto, tokenpayload);
   }
 
-
-  @UseGuards(AuthTokenGuard)  
+  @UseGuards(AuthTokenGuard)
   @Patch(':id')
   update(
     @Param('id') id: number,

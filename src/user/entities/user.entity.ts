@@ -36,10 +36,9 @@ export class User {
   @OneToMany(() => Note, note => note.for)
   notereceived: Note[];
 
-  @Column({default: true})
+  @Column({ default: true })
   active: boolean;
 
-  @Column({default: ''})
+  @Column({ default: '' })
   picture: string;
-
 }

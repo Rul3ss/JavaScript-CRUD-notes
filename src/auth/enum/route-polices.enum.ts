@@ -1,13 +1,13 @@
-export enum RoutePolices{
-    FindallNotes = 'findAllNotes',
-    FindOneNote = 'findOneNotes',
-    CreateNote = 'createNote',
-    UpdateOneNote = 'updateOneNote',
-    DeleteOneNote = 'deleteOneNote',
+export enum RoutePolices {
+  FindallNotes = 'findAllNotes',
+  FindOneNote = 'findOneNotes',
+  CreateNote = 'createNote',
+  UpdateOneNote = 'updateOneNote',
+  DeleteOneNote = 'deleteOneNote',
 
-    FindAllUsers = 'findAllUsers',
-    FindOneUser = 'findOneUser',
-    CreateOneUser = 'createOneUser',
-    UpdateOneUser = 'updateOneUser',
-    DeleteOneUser = 'deleteOneUser',
+  FindAllUsers = 'findAllUsers',
+  FindOneUser = 'findOneUser',
+  CreateOneUser = 'createOneUser',
+  UpdateOneUser = 'updateOneUser',
+  DeleteOneUser = 'deleteOneUser',
 }

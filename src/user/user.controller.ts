@@ -68,18 +68,21 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload-picture')
   async uploadPicture(
-    
     @UploadedFile(
       new ParseFilePipeBuilder()
-      .addFileTypeValidator({
-        fileType: /jpeg|jpg|png/g,
-      }).addMaxSizeValidator({
-        maxSize: 10 * (1024*1024),
-      }).build({
-        errorHttpStatusCode : HttpStatus.UNPROCESSABLE_ENTITY,
-      })
-    ) file: Express.Multer.File,
+        .addFileTypeValidator({
+          fileType: /jpeg|jpg|png/g,
+        })
+        .addMaxSizeValidator({
+          maxSize: 10 * (1024 * 1024),
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    file: Express.Multer.File,
     @TokenPayloadParam() tokenPayload: TokenPayloadDto,
   ) {
     return this.userService.uploadPicture(file, tokenPayload);
-  }}
+  }
+}

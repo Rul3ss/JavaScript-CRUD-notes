@@ -15,7 +15,6 @@ import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
-
 @Injectable()
 export class UserService {
   constructor(
@@ -33,7 +32,6 @@ export class UserService {
         name: createUserDto.name,
         passwordHash,
         email: createUserDto.email,
-        
       };
 
       const newUser = this.userRepository.create(userData);
@@ -115,31 +113,19 @@ export class UserService {
   }
 
   async uploadPicture(
-
     file: Express.Multer.File,
     tokenPayLoad: TokenPayloadDto,
-  ){
-
-    
-    
-
-    if(file.size < 1024){
-      throw new BadRequestException ('File too small');
-    
+  ) {
+    if (file.size < 1024) {
+      throw new BadRequestException('File too small');
     }
 
     const user = await this.findOne(tokenPayLoad.sub);
 
-
-
-
-
-
     const fileExtension = path
-    .extname(file.originalname)
-    .toLocaleLowerCase()
-    .substring(1);
-    
+      .extname(file.originalname)
+      .toLocaleLowerCase()
+      .substring(1);
 
     const filename = `${tokenPayLoad.sub}.${fileExtension}`;
     const fileFullPath = path.resolve(process.cwd(), 'pictures', filename);
@@ -150,9 +136,6 @@ export class UserService {
 
     await this.userRepository.save(user);
 
-  
-
-    return user;  
+    return user;
   }
 }
-

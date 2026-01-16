@@ -28,8 +28,8 @@ export class AuthService {
       active: true,
     });
 
-    if(!user){
-        throw new UnauthorizedException ('User not authorized')
+    if (!user) {
+      throw new UnauthorizedException('User not authorized');
     }
 
     if (user) {
@@ -50,24 +50,26 @@ export class AuthService {
     return this.CreateTokens(user);
   }
 
-  private async CreateTokens(user:User){
-    const acessTokenPromisse =  this.SignJWTAssync<Partial<User>>(
+  private async CreateTokens(user: User) {
+    const acessTokenPromisse = this.SignJWTAssync<Partial<User>>(
       user.id,
       this.jwtConfiguration.jwtTtl,
       { email: user.email },
     );
 
-    const refreshTokenPromisse =  this.SignJWTAssync(
+    const refreshTokenPromisse = this.SignJWTAssync(
       user.id,
       this.jwtConfiguration.JwtRefreshTtl,
-      
     );
 
-    const [acessToken, refreshToken] = await Promise.all([acessTokenPromisse, refreshTokenPromisse])
+    const [acessToken, refreshToken] = await Promise.all([
+      acessTokenPromisse,
+      refreshTokenPromisse,
+    ]);
 
     return {
       acessToken,
-      refreshToken
+      refreshToken,
     };
   }
 
@@ -87,21 +89,22 @@ export class AuthService {
   }
 
   async refreshTokens(refreshTokenDto: RefreshTokenDto) {
-    try{
-        const{ sub} = await this.jwtService.verifyAsync(
-            refreshTokenDto.refreshToken, this.jwtConfiguration
-        )
-        const user = await this.userRepository.findOneBy({
-            id:sub,
-            active: true,
-        })
+    try {
+      const { sub } = await this.jwtService.verifyAsync(
+        refreshTokenDto.refreshToken,
+        this.jwtConfiguration,
+      );
+      const user = await this.userRepository.findOneBy({
+        id: sub,
+        active: true,
+      });
 
-        if(!user) {
-            throw new Error('User not Authorized')
-        }
-        return this.CreateTokens(user);
-    } catch(error){
-        throw new UnauthorizedException(error.message);
+      if (!user) {
+        throw new Error('User not Authorized');
+      }
+      return this.CreateTokens(user);
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
     }
   }
 }

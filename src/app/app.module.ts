@@ -35,7 +35,7 @@ import * as path from 'path';
     }),
     ServeStaticModule.forRoot({
       rootPath: path.resolve(process.cwd(), 'pictures'),
-      serveRoot: '/pictures'
+      serveRoot: '/pictures',
     }),
     notesModule,
     UserModule,

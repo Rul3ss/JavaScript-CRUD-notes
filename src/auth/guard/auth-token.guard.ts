@@ -18,7 +18,7 @@ import { Repository } from 'typeorm';
 export class AuthTokenGuard implements CanActivate {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository : Repository<User>,
+    private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
@@ -43,7 +43,7 @@ export class AuthTokenGuard implements CanActivate {
         active: true,
       });
 
-      if(!user){
+      if (!user) {
         throw new UnauthorizedException('User not Authorized');
       }
 
