@@ -11,7 +11,8 @@ import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import appConfig from './app.config';
 import { AuthModule } from 'src/auth/auth.module';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -31,6 +32,10 @@ import { AuthModule } from 'src/auth/auth.module';
           synchronize: appConfigurations.database.synchronize, // não deve ser usado em produção
         };
       },
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(process.cwd(), 'pictures'),
+      serveRoot: '/pictures'
     }),
     notesModule,
     UserModule,
