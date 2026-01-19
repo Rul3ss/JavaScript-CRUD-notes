@@ -6,7 +6,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { create } from 'domain';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
+import { error } from 'console';
+import { find } from 'rxjs';
 describe('UserService', () => {
   let userService: UserService;
   let userRepository: Repository<User>;
@@ -21,6 +23,8 @@ describe('UserService', () => {
           useValue: {
             create: jest.fn(),
             save: jest.fn(),
+            findOneBy: jest.fn(),
+            find: jest.fn(),
           },
         },
         {
@@ -76,6 +80,69 @@ describe('UserService', () => {
       await expect(userService.create({} as any)).rejects.toThrow(
         ConflictException,
       );
+    });
+    it('should throw error if other error occurs', async () => {
+      jest
+        .spyOn(userRepository, 'save')
+        .mockRejectedValue(new Error('generic error'));
+
+      await expect(userService.create({} as any)).rejects.toThrow(
+        new Error('generic error'),
+      );
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return if a user is found', async () => {
+      const userId = 1;
+      const foundUser = {
+        id: userId,
+        nome: 'Lucas',
+        email: 'lucas@email.com',
+        passwordHash: 'hashedPassword',
+      };
+
+      jest
+        .spyOn(userRepository, 'findOneBy')
+        .mockResolvedValue(foundUser as any);
+
+      const result = await userService.findOne(userId);
+
+      expect(result).toEqual(foundUser);
+    });
+
+    it('should throw not found exception if user does not exist', async () => {
+      await expect(userService.findOne(1)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return all users', async () => {
+      const usersMock: User[] = [
+        {
+          id: 1,
+          name: 'Lucas',
+          email: 'lucas@email.com',
+          passwordHash: '',
+        } as User,
+        {
+          id: 1,
+          name: 'Mari ',
+          email: 'Maria@email.com',
+          passwordHash: '',
+        } as User,
+      ];
+
+      jest.spyOn(userRepository, 'find').mockResolvedValue(usersMock as any);
+
+      const result = await userService.findAll();
+
+      expect(result).toEqual(usersMock);
+    });
+    it('should return a empty array if no users found', async () => {
+      jest.spyOn(userRepository, 'find').mockResolvedValue([] as any);
+      const result = await userService.findAll();
+      expect(result).toEqual([]);
     });
   });
 });
