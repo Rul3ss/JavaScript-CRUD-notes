@@ -39,7 +39,7 @@ export class UserService {
       return newUser;
     } catch (error) {
       if (error.code === '23505') {
-        throw new ConflictException('E-mail já está cadastrado');
+        throw new ConflictException('E-mail already in use');
       }
       throw error;
     }
@@ -91,7 +91,7 @@ export class UserService {
     }
 
     if (user.id !== tokenPayload.sub) {
-      throw new ForbiddenException('U cant acess another user');
+      throw new ForbiddenException('U cant access another user');
     }
 
     return this.userRepository.save(user);
@@ -106,7 +106,7 @@ export class UserService {
     }
 
     if (user.id !== tokenPayload.sub) {
-      throw new ForbiddenException('U cant acess another user');
+      throw new ForbiddenException('U cant access another user');
     }
 
     return this.userRepository.remove(user);
