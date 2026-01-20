@@ -98,12 +98,7 @@ export class UserService {
   }
 
   async remove(id: number, tokenPayload: TokenPayloadDto) {
-    const user = await this.userRepository.findOneBy({
-      id,
-    });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    const user = await this.findOne(id);
 
     if (user.id !== tokenPayload.sub) {
       throw new ForbiddenException('U cant access another user');
