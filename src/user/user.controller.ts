@@ -10,12 +10,8 @@ import {
   Req,
   UseInterceptors,
   UploadedFile,
-  ParseFilePipe,
-  MaxFileSizeValidator,
-  FileTypeValidator,
   ParseFilePipeBuilder,
   HttpStatus,
-  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,8 +21,6 @@ import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 import { AuthTokenGuard } from 'src/auth/guard/auth-token.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as path from 'path';
-import * as fs from 'fs/promises';
 
 @Controller('user')
 export class UserController {
@@ -38,7 +32,7 @@ export class UserController {
   }
   @UseGuards(AuthTokenGuard)
   @Get()
-  findAll(@Req() req: Request) {
+  findAll() {
     return this.userService.findAll();
   }
   @UseGuards(AuthTokenGuard)

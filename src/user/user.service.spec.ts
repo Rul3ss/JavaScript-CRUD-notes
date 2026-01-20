@@ -1,4 +1,3 @@
-import { UpdateUserDto } from './dto/update-user.dto';
 import { HashingService } from 'src/auth/hashing/hashing.service';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
@@ -6,15 +5,12 @@ import { User } from './entities/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { create } from 'domain';
 import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
-import { error } from 'console';
-import { buffer, find } from 'rxjs';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
