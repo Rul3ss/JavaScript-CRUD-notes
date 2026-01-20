@@ -24,9 +24,7 @@ export class NotesService {
     private readonly userService: UserService,
     @Inject(noteConfig.KEY)
     private readonly noteConfiguration: ConfigType<typeof noteConfig>,
-  ) {
-    console.log(noteConfiguration);
-  }
+  ) {}
 
   async findall(paginationDto?: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;

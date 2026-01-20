@@ -9,18 +9,20 @@ import { MyExceptionFilter } from 'src/common/filters/my-exception.filter';
 import { ErrorExceptionFilter } from 'src/common/filters/error-exception.filter';
 import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 import { ConfigModule, ConfigType } from '@nestjs/config';
-import appConfig from './app.config';
 import { AuthModule } from 'src/auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
+import globalConfig from './global.config';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ConfigModule.forFeature(appConfig),
+    ConfigModule.forFeature(globalConfig),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule.forFeature(appConfig)],
-      inject: [appConfig.KEY],
-      useFactory: async (appConfigurations: ConfigType<typeof appConfig>) => {
+      imports: [ConfigModule.forFeature(globalConfig)],
+      inject: [globalConfig.KEY],
+      useFactory: async (
+        appConfigurations: ConfigType<typeof globalConfig>,
+      ) => {
         return {
           type: appConfigurations.database.type,
           host: appConfigurations.database.host,
