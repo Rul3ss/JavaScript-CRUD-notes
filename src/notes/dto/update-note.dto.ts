@@ -1,9 +1,17 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { IsBoolean, IsOptional } from 'class-validator';
 import { CreateNoteDto } from './create-note.dto';
-import { IsBoolean } from 'class-validator';
 
 export class UpdateNoteDto extends PartialType(CreateNoteDto) {
-  readonly text?: string;
+  @ApiProperty({
+    example: true,
+    description: 'sign if note as read',
+    required: false,
+  })
   @IsBoolean()
+  @IsOptional()
   readonly read?: boolean;
+
+  // @ApiHideProperty()
+  // readonly testando?: string;
 }

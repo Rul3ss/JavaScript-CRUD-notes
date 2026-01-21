@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { notesController } from './notes.controller';
+import { NoteController } from './notes.controller';
 import { NotesService } from './notes.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Note } from './entities/note.entity';
@@ -15,7 +15,7 @@ import { EmailModule } from 'src/email/email.module';
     ConfigModule.forFeature(noteConfig),
     EmailModule,
   ],
-  controllers: [notesController],
+  controllers: [NoteController],
   providers: [NotesService],
 })
 export class notesModule {}

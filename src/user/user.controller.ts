@@ -21,26 +21,31 @@ import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 import { AuthTokenGuard } from 'src/auth/guard/auth-token.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiBearerAuth()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
   @UseGuards(AuthTokenGuard)
+  @ApiBearerAuth()
   @Get()
   findAll() {
     return this.userService.findAll();
   }
   @UseGuards(AuthTokenGuard)
+  @ApiBearerAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
   @UseGuards(AuthTokenGuard)
+  @ApiBearerAuth()
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -50,6 +55,7 @@ export class UserController {
     return this.userService.update(+id, updateUserDto, tokenPayload);
   }
   @UseGuards(AuthTokenGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   remove(
     @Param('id') id: string,
@@ -59,6 +65,7 @@ export class UserController {
   }
 
   @UseGuards(AuthTokenGuard)
+  @ApiBearerAuth()
   @UseInterceptors(FileInterceptor('file'))
   @Post('upload-picture')
   async uploadPicture(

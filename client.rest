@@ -14,7 +14,7 @@ role: admin
 ###
 
 ###list one note
-GET {{baseUrl}}/notes/4/
+GET {{baseUrl}}/notes/11/
 Authorization: Bearer {{authToken}}
 ###
 
@@ -25,11 +25,11 @@ Authorization: Bearer {{authToken}}
 
  {
     "text": "Novo recado",
-    "forId": 1  
+    "forId": 13  
   }
 
 ### update a note
-PATCH  {{baseUrl}}/notes/4
+PATCH  {{baseUrl}}/notes/11
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -39,7 +39,7 @@ Authorization: Bearer {{authToken}}
   }
 
 ###delete a note
-DELETE {{baseUrl}}/notes/4/
+DELETE {{baseUrl}}/notes/11/
 Authorization: Bearer {{authToken}}
 
 #########################
@@ -69,13 +69,13 @@ Content-Type: application/json
 
 
  {
-    "email": "Lucas6@email.com" ,
+    "email": "Lucass6@email.com" ,
     "password": "123456",
     "name": "Lucas Souza"
   }
 
 ### update a user
-PATCH  {{baseUrl}}/user/5
+PATCH  {{baseUrl}}/user/13
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -85,7 +85,7 @@ Authorization: Bearer {{authToken}}
   }
 
 ###delete a user
-DELETE {{baseUrl}}/user/12/
+DELETE {{baseUrl}}/user/13/
 Authorization: Bearer {{authToken}}
 
 

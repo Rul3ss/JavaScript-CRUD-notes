@@ -16,6 +16,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { ConfigService, ConfigType } from '@nestjs/config';
 import noteConfig from './note.config';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
+import { ResponseNoteDto } from './dto/response-note.dto';
 
 @Injectable()
 export class NotesService {
@@ -28,7 +29,7 @@ export class NotesService {
     private readonly emailService: EmailService,
   ) {}
 
-  async findall(paginationDto?: PaginationDto) {
+  async findAll(paginationDto?: PaginationDto): Promise<ResponseNoteDto[]> {
     const { limit = 10, offset = 0 } = paginationDto;
 
     return await this.noteRepository.find({
@@ -49,7 +50,7 @@ export class NotesService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<ResponseNoteDto> {
     //const recado = this.notes.find(item => item.id === id);
 
     const note = await this.noteRepository.findOne({
@@ -73,7 +74,10 @@ export class NotesService {
     throw new NotFoundException(`Note not found`);
   }
 
-  async create(createNoteDto: CreateNoteDto, tokenPayload: TokenPayloadDto) {
+  async create(
+    createNoteDto: CreateNoteDto,
+    tokenPayload: TokenPayloadDto,
+  ): Promise<ResponseNoteDto> {
     const { forId } = createNoteDto;
 
     const from = await this.userService.findOne(tokenPayload.sub);
@@ -105,7 +109,7 @@ export class NotesService {
       },
       to: {
         id: note.to.id,
-        name: note.to.id,
+        name: note.to.name,
       },
     };
   }
@@ -114,7 +118,7 @@ export class NotesService {
     id: number,
     updateNoteDto: UpdateNoteDto,
     tokenPayload: TokenPayloadDto,
-  ) {
+  ): Promise<ResponseNoteDto> {
     const note = await this.findOne(id);
 
     if (note.from.id !== tokenPayload.sub) {
@@ -127,13 +131,16 @@ export class NotesService {
     return await this.noteRepository.save(note);
   }
 
-  async remove(id: number, tokenPayload: TokenPayloadDto) {
+  async remove(
+    id: number,
+    tokenPayload: TokenPayloadDto,
+  ): Promise<ResponseNoteDto> {
     const note = await this.findOne(id);
 
     if (note.from.id !== tokenPayload.sub) {
       throw new ForbiddenException('U cant delete another user note');
     }
-
-    return this.noteRepository.remove(note);
+    await this.noteRepository.delete(note.id);
+    return note;
   }
 }
