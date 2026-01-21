@@ -13,12 +13,18 @@ import { AuthModule } from 'src/auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
 import globalConfig from './global.config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 @Module({
   imports: [
     ConfigModule.forRoot(),
     ConfigModule.forFeature(globalConfig),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule.forFeature(globalConfig)],
+      imports: [
+        ThrottlerModule.forRoot([
+          { ttl: 60000, limit: 60, blockDuration: 5000 },
+        ]),
+        ConfigModule.forFeature(globalConfig),
+      ],
       inject: [globalConfig.KEY],
       useFactory: async (
         appConfigurations: ConfigType<typeof globalConfig>,
@@ -46,6 +52,10 @@ import globalConfig from './global.config';
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_FILTER,
       useClass: MyExceptionFilter,
