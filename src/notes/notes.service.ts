@@ -1,3 +1,4 @@
+import { EmailService } from './../email/email.service';
 import {
   BadGatewayException,
   ForbiddenException,
@@ -24,6 +25,7 @@ export class NotesService {
     private readonly userService: UserService,
     @Inject(noteConfig.KEY)
     private readonly noteConfiguration: ConfigType<typeof noteConfig>,
+    private readonly emailService: EmailService,
   ) {}
 
   async findall(paginationDto?: PaginationDto) {
@@ -32,13 +34,14 @@ export class NotesService {
     return await this.noteRepository.find({
       take: limit,
       skip: offset,
-      relations: ['from', 'for'],
+      relations: ['from', 'to'],
+
       select: {
         from: {
           id: true,
           name: true,
         },
-        for: {
+        to: {
           id: true,
           name: true,
         },
@@ -53,13 +56,13 @@ export class NotesService {
       where: {
         id: id,
       },
-      relations: ['from', 'for'],
+      relations: ['from', 'to'],
       select: {
         from: {
           id: true,
           name: true,
         },
-        for: {
+        to: {
           id: true,
           name: true,
         },
@@ -75,18 +78,24 @@ export class NotesService {
 
     const from = await this.userService.findOne(tokenPayload.sub);
 
-    const for1 = await this.userService.findOne(forId);
+    const to = await this.userService.findOne(forId);
 
     const newNote = {
       text: createNoteDto.text,
       from,
-      for: for1,
+      to,
       read: false,
       date: new Date(),
     };
 
-    const note = await this.noteRepository.create(newNote);
+    const note = this.noteRepository.create(newNote);
     await this.noteRepository.save(note);
+
+    await this.emailService.sendEmail(
+      to.email,
+      `You receive a note from ${from.name}`,
+      createNoteDto.text,
+    );
 
     return {
       ...note,
@@ -94,9 +103,9 @@ export class NotesService {
         id: note.from.id,
         name: note.from.name,
       },
-      for: {
-        id: note.for.id,
-        name: note.for.id,
+      to: {
+        id: note.to.id,
+        name: note.to.id,
       },
     };
   }

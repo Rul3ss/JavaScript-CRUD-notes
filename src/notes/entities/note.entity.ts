@@ -35,5 +35,5 @@ export class Note {
 
   @ManyToOne(() => User, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'for' })
-  for: User;
+  to: User;
 }

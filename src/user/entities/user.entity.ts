@@ -33,7 +33,7 @@ export class User {
 
   @OneToMany(() => Note, note => note.from)
   notesend: Note[];
-  @OneToMany(() => Note, note => note.for)
+  @OneToMany(() => Note, note => note.to)
   notereceived: Note[];
 
   @Column({ default: true })
